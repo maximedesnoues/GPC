@@ -52,8 +52,11 @@ public class PlayerController : MonoBehaviour
     {
         if (rotationDirection != Vector2.zero)
         {
-            float angle = Mathf.Atan2(rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
+            float angle = Mathf.Atan2(-rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg;
+
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
+
+            transform.rotation = rotation;
         }
     }
 }
