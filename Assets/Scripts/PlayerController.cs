@@ -1,38 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5.0f;
+    [SerializeField] private Joystick movementJoystick;
+    [SerializeField] private Joystick rotationJoystick;
+
+    [SerializeField] private float speed;
+
     private Rigidbody2D rb;
+
     private Vector2 moveDirection;
+    private Vector2 rotationDirection;
 
-    public Joystick joystick;
-
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
         ProcessInputs();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Move();
+        RotateTowardsMovementDirection();
     }
 
-    void ProcessInputs()
+    private void ProcessInputs()
     {
-        // Utilise la position du joystick pour définir la direction de mouvement
-        float moveX = joystick.Horizontal;
-        float moveY = joystick.Vertical;
+        // Utilise la position du movementJoystick pour définir la direction du mouvement
+        float moveX = movementJoystick.Horizontal;
+        float moveY = movementJoystick.Vertical;
         moveDirection = new Vector2(moveX, moveY).normalized;
+
+        // Utilise la position du rotationJoystick pour définir la direction de la rotation
+        float rotateX = rotationJoystick.Horizontal;
+        float rotateY = rotationJoystick.Vertical;
+        rotationDirection = new Vector2(rotateX, rotateY).normalized;
     }
 
-    void Move()
+    private void Move()
     {
         rb.velocity = new Vector2(moveDirection.x * speed, moveDirection.y * speed);
+    }
+
+    private void RotateTowardsMovementDirection()
+    {
+        if (rotationDirection != Vector2.zero)
+        {
+            float angle = Mathf.Atan2(rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
+        }
     }
 }
