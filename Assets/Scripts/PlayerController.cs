@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Joystick movementJoystick;
     [SerializeField] private Joystick rotationJoystick;
 
+    [SerializeField] private Transform objectToRotate;
+
+    [SerializeField] private float objectDistance;
+
     [SerializeField] private float speed;
 
     private Rigidbody2D rb;
@@ -22,12 +26,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         ProcessInputs();
+        UpdateObjectPositionAndPlayerOrientation();
     }
 
     private void FixedUpdate()
     {
         Move();
-        RotateTowardsMovementDirection();
     }
 
     private void ProcessInputs()
@@ -48,15 +52,39 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(moveDirection.x * speed, moveDirection.y * speed);
     }
 
-    private void RotateTowardsMovementDirection()
+    private void UpdateObjectPositionAndPlayerOrientation()
     {
-        if (rotationDirection != Vector2.zero)
+        if (rotationDirection.sqrMagnitude > 0.01)
         {
-            float angle = Mathf.Atan2(-rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg;
+            // Calcule l'angle du joystick par rapport à l'origine et ajuste pour que la pointe du triangle soit orientée à l'opposé du joueur
+            float angle = Mathf.Atan2(rotationDirection.y, rotationDirection.x) * Mathf.Rad2Deg;
 
-            Quaternion rotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
+            // Calcule la position du triangle autour du joueur en utilisant la distance et l'angle du joystick
+            Vector3 direction = Quaternion.Euler(0, 0, angle) * Vector3.right;
+            Vector3 trianglePosition = transform.position + direction * objectDistance + new Vector3(0, 0, -transform.position.z);
 
-            transform.rotation = rotation;
+            objectToRotate.position = trianglePosition;
+
+            // Oriente le joueur en fonction de la position du triangle
+            if (Mathf.Abs(rotationDirection.y) > Mathf.Abs(rotationDirection.x))
+            {
+                // Le triangle est principalement au-dessus ou en dessous du joueur
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else if (rotationDirection.x > 0)
+            {
+                // Le triangle est à droite du joueur
+                transform.eulerAngles = new Vector3(0, -90, 0);
+            }
+            else
+            {
+                // Le triangle est à gauche du joueur
+                transform.eulerAngles = new Vector3(0, 90, 0);
+            }
+
+            // Ajuste l'orientation du triangle pour que sa pointe soit toujours à l'opposé du joueur
+            Vector3 relativePos = transform.position - objectToRotate.position;
+            objectToRotate.up = -relativePos.normalized;
         }
     }
 }
