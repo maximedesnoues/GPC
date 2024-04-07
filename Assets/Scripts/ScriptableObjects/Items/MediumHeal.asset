@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c86737bba561d4a8cb0da443f566f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 84fbdce8704f59744867f2545073212e, type: 3}
   m_Name: MediumHeal
   m_EditorClassIdentifier: 
-  itemName: Small Potion
-  itemDescription: Soigne un peu le joueur
-  regenPts: 10
-  itemGO: {fileID: 1243400735458573197, guid: 004d78c1fc06b5c42be467091af9d64b, type: 3}
+  itemName: MediumHeal
+  itemDescription: Heal the player
+  regenPts: 30
+  itemPrefab: {fileID: 1243400735458573197, guid: 004d78c1fc06b5c42be467091af9d64b, type: 3}

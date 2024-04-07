@@ -29,7 +29,7 @@ public class Items : MonoBehaviour
         }
 
         // Charge et configure le visuel des items
-        GameObject visual = Instantiate(itemsData.itemGO);
+        GameObject visual = Instantiate(itemsData.itemPrefab);
         visual.transform.SetParent(transform);
         visual.transform.localPosition = Vector3.zero;
         visual.transform.rotation = Quaternion.identity;

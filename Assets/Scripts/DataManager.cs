@@ -1,18 +1,18 @@
 using UnityEditor;
 using UnityEngine;
 
-public class CustomMenuItems
+public class DataManager
 {
-    [MenuItem("Blacked Out/Create Items Data")]
+    [MenuItem("Blacked Out/Create Item Data")]
     public static void CreateItemsData()
     {
-        CreateScriptableObject<ItemsData>("ItemsData", "Items");
+        CreateScriptableObject<ItemsData>("ItemData", "Items");
     }
 
-    [MenuItem("Blacked Out/Create Monster")]
+    [MenuItem("Blacked Out/Create Monster Data")]
     public static void CreateMonster()
     {
-        CreateScriptableObject<Monster>("Monster", "Monster");
+        CreateScriptableObject<MonstersData>("MonsterData", "Monsters");
     }
 
     private static void CreateScriptableObject<T>(string fileName, string folderName) where T : ScriptableObject
@@ -30,20 +30,4 @@ public class CustomMenuItems
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = newObject;
     }
-}
-
-public class ItemsData : ScriptableObject
-{
-    public string itemName;
-    public string itemDescription;
-    public int regenPts;
-    public GameObject itemGO;
-}
-
-public class Monster : ScriptableObject
-{
-    public string monsterName;
-    public int health;
-    public int damage;
-    public GameObject monsterPrefab;
 }
